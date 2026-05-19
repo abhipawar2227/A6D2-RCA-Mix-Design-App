@@ -18,6 +18,97 @@ st.set_page_config(
     layout="wide"
 )
 
+# ============================================================
+# OPTIONAL BACKGROUND VIDEO
+# ============================================================
+
+def add_local_background_video(video_file="background.mp4", overlay_opacity=0.55):
+    """
+    Place a file named background.mp4 in the same GitHub folder as this app.
+    The app will run normally even if the video file is missing.
+
+    Recommended video:
+    - MP4 format
+    - 8 to 15 seconds loop
+    - compressed below 20 to 30 MB for Streamlit Cloud
+    """
+    import base64
+    from pathlib import Path
+
+    video_path = Path(video_file)
+
+    if not video_path.exists():
+        return
+
+    video_bytes = video_path.read_bytes()
+    encoded_video = base64.b64encode(video_bytes).decode()
+
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background: transparent;
+        }}
+
+        #bg-video {{
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -3;
+            object-fit: cover;
+        }}
+
+        #bg-overlay {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, {overlay_opacity});
+            z-index: -2;
+        }}
+
+        [data-testid="stHeader"] {{
+            background: rgba(0,0,0,0);
+        }}
+
+        [data-testid="stSidebar"] {{
+            background: rgba(14, 17, 23, 0.90);
+            backdrop-filter: blur(6px);
+        }}
+
+        .block-container {{
+            background: rgba(0, 0, 0, 0.66);
+            border-radius: 18px;
+            padding: 2rem 2.2rem 2.2rem 2.2rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }}
+
+        h1, h2, h3, h4, h5, h6, p, label, span, div {{
+            color: #ffffff;
+        }}
+
+        .stDataFrame, .stTable {{
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+        }}
+        </style>
+
+        <video autoplay muted loop playsinline id="bg-video">
+            <source src="data:video/mp4;base64,{encoded_video}" type="video/mp4">
+        </video>
+        <div id="bg-overlay"></div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+add_local_background_video("background.mp4", overlay_opacity=0.55)
 
 # ============================================================
 # GRADE DATA
