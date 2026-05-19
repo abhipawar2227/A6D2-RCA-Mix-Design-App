@@ -108,7 +108,7 @@ def add_local_background_video(video_file="background.mp4", overlay_opacity=0.55
     )
 
 
-add_local_background_video("background.mp4", overlay_opacity=0.55)
+add_local_background_video("background.mp4", overlay_opacity=0)
 
 # ============================================================
 # GRADE DATA
